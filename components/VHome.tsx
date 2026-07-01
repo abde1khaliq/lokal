@@ -1,25 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import {
-  Box,
-  Flex,
-  Image,
-  Icon,
-  Text,
-  HStack,
-  useBreakpointValue,
-} from "@chakra-ui/react";
-import {
-  Search,
-  Plus,
-  Home,
-  User,
-  Bell,
-  Ellipsis,
-  ChevronDown,
-  SlidersHorizontal,
-} from "lucide-react";
+import { Box, Flex, Image, Icon, Text, HStack, useBreakpointValue } from "@chakra-ui/react";
+import { Search, Plus, Home, User, Bell, Ellipsis, ChevronDown, SlidersHorizontal } from "lucide-react";
 
 interface Pin {
   id: number;
@@ -39,15 +22,7 @@ const LOCAL_IMAGES = [
   "/pins/eight.jpg",
 ];
 
-const AUTHORS = [
-  "DesignLab",
-  "CreativeStudio",
-  "Archy",
-  "VisualsByL",
-  "NeonDreamer",
-  "UrbanSnap",
-  "ConceptArtistry",
-];
+const AUTHORS = ["DesignLab", "CreativeStudio", "Archy", "VisualsByL", "NeonDreamer", "UrbanSnap", "ConceptArtistry"];
 
 const PINS: Pin[] = Array.from({ length: 40 }).map((_, i) => {
   const heights = [220, 340, 280, 400, 260, 310, 380];
@@ -60,12 +35,8 @@ const PINS: Pin[] = Array.from({ length: 40 }).map((_, i) => {
 });
 
 export default function VHome() {
-  const columnCount =
-    useBreakpointValue(
-      { base: 2, sm: 3, md: 4, lg: 5, xl: 7 },
-      { fallback: "md" },
-    ) ?? 4;
-
+  const columnCount = useBreakpointValue({ base: 2, sm: 3, md: 4, lg: 5, xl: 7 }, { fallback: "md" }) ?? 4;
+  
   // Distribute pins into columns
   const columns = Array.from({ length: columnCount }, () => [] as Pin[]);
   PINS.forEach((pin, i) => {
@@ -186,23 +157,18 @@ export default function VHome() {
               gap={2}
               transition="all 0.2s"
               _hover={{ bg: "rgba(255, 255, 255, 0.15)" }}
-              display={{ base: "flex", md: "none" }}
+              display={{ base: "flex", md: "none" }} // Show filter icon button on mobile instead of all pills if space is tight, or just show it alongside. Let's just show it alongside.
             >
               <Icon as={SlidersHorizontal} fontSize="sm" />
             </Flex>
 
-            {[
-              "All",
-              "Architecture",
-              "Art",
-              "Minimalist",
-            ].map((filter, i) => (
+            {["All", "Architecture", "Art", "Minimalist", "Cyberpunk", "Nature", "Photography"].map((filter, i) => (
               <Flex
                 key={filter}
                 as="button"
                 px={4}
                 py={2}
-                borderRadius="xl"
+                borderRadius="full"
                 bg={i === 0 ? "white" : "rgba(255, 255, 255, 0.08)"}
                 color={i === 0 ? "black" : "white"}
                 fontWeight="semibold"
@@ -218,12 +184,13 @@ export default function VHome() {
             ))}
           </Flex>
 
+          {/* Sort Dropdown */}
           <Flex
             as="button"
             px={4}
             py={2}
             ml={4}
-            borderRadius="xl"
+            borderRadius="full"
             bg="transparent"
             border="1px solid rgba(255, 255, 255, 0.2)"
             color="white"
@@ -233,7 +200,7 @@ export default function VHome() {
             gap={2}
             transition="all 0.2s"
             _hover={{ bg: "rgba(255, 255, 255, 0.1)" }}
-            display={{ base: "none", md: "flex" }}
+            display={{ base: "none", md: "flex" }} // Hide on mobile to save space, rely on SlidersHorizontal
           >
             Sort by
             <Icon as={ChevronDown} fontSize="md" />
@@ -306,50 +273,11 @@ function MobileNavButton({ icon, label }: { icon: ReactNode; label: string }) {
 function PinCard({ pin }: { pin: Pin }) {
   return (
     <Box mb={4} w="100%">
-      <Box
-        h={`${pin.height}px`}
-        overflow="hidden"
-        borderRadius="xl"
-        position="relative"
-      >
-        <Image
-          src={pin.image}
-          w="100%"
-          h="100%"
-          objectFit="cover"
-          display="block"
-        />
-        <Flex
-          as="button"
-          position="absolute"
-          bottom={3}
-          left={3}
-          right={3}
-          py={2}
-          bg="rgba(255, 255, 255, 0.25)"
-          color="white"
-          fontWeight="semibold"
-          fontSize="xs"
-          borderRadius="xl"
-          align="center"
-          justify="center"
-          backdropFilter="blur(16px) saturate(180%)"
-          css={{ WebkitBackdropFilter: "blur(10px) saturate(120%)" }}
-          border="1px solid rgba(255, 255, 255, 0.2)"
-          _hover={{ bg: "rgba(255, 255, 255, 0.35)" }}
-          transition="all 0.2s"
-        >
-          Add to Outfit
-        </Flex>
+      <Box h={`${pin.height}px`} overflow="hidden" borderRadius="xl">
+        <Image src={pin.image} w="100%" h="100%" objectFit="cover" display="block" />
       </Box>
       <Flex mt={1} px={1} justify="space-between" align="center">
-        <Flex
-          align="center"
-          gap={2}
-          cursor="pointer"
-          _hover={{ opacity: 0.8 }}
-          transition="opacity 0.2s"
-        >
+        <Flex align="center" gap={2} cursor="pointer" _hover={{ opacity: 0.8 }} transition="opacity 0.2s">
           <Flex
             w="24px"
             h="24px"
@@ -363,26 +291,21 @@ function PinCard({ pin }: { pin: Pin }) {
           >
             {pin.author.charAt(0)}
           </Flex>
-          <Text
-            fontSize="12px"
-            color="rgba(255, 255, 255, 0.9)"
-            fontWeight="medium"
-          >
+          <Text fontSize="12px" color="rgba(255, 255, 255, 0.9)" fontWeight="medium">
             {pin.author}
           </Text>
         </Flex>
         <Flex
           w="32px"
           h="32px"
-          borderRadius="xl"
           _hover={{ bg: "rgba(255, 255, 255, 0.15)" }}
           align="center"
           justify="center"
           cursor="pointer"
           transition="background 0.2s"
         >
-          <Icon color="rgba(255, 255, 255, 0.8)" fontSize="lg">
-            <Ellipsis />
+          <Icon color="rgba(255, 255, 255, 0.8)" fontSize="md">
+            <Plus/>
           </Icon>
         </Flex>
       </Flex>
